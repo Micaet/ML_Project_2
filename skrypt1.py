@@ -3,8 +3,10 @@ import numpy as np
 import os
 from glob import glob
 
+print(f"Current working directory: {os.getcwd()}")
+
 input_folder = "Smashed"
-output_folder = "czyste_zdjecia"
+output_folder = "clean_data"
 os.makedirs(output_folder, exist_ok=True)
 
 def wykryj_kolory(hsv_image, gray_image):
@@ -130,15 +132,22 @@ for sciezka in pliki:
     nazwa = os.path.basename(sciezka)
     print(f"Przetwarzanie: {nazwa}")
 
-    img_oryginalny = cv2.imread(sciezka)
+    img_to_process = cv2.imread(sciezka)
 
-    wysokosc, szerokosc = img_oryginalny.shape[:2]
+    if img_to_process is None:
+        print(f"Nie udało się wczytać obrazu: {sciezka}")
+        continue
+
+    
+    
+    # Common cropping logic, applied after potential resize
+    wysokosc, szerokosc = img_to_process.shape[:2]
     top = int(0.04 * wysokosc)
     bottom = int(0.96 * wysokosc)
     left = int(0.07 * szerokosc)
     right = int(0.93 * szerokosc)
-    
-    img = img_oryginalny[top:bottom, left:right]
+    img = img_to_process[top:bottom, left:right]
+    img = cv2.resize(img, (199, 213), interpolation=cv2.INTER_AREA)
 
     maska_napisow = usun_napisy_na_brzegach(img)
     
