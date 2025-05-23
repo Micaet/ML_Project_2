@@ -3,7 +3,6 @@ import numpy as np
 import os
 from glob import glob
 
-print(f"Current working directory: {os.getcwd()}")
 
 input_folder = "Smashed"
 output_folder = "clean_data"
